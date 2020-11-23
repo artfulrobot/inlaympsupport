@@ -3,7 +3,7 @@
     <div class="party bc-lb1">
 
       <h3>
-        <svg-vue class="x" style="max-height: 3rem;" :icon="party.logo" ></svg-vue>
+        <div class="logo-layout"><svg-vue style="max-height: 3rem;" :icon="party.logo" ></svg-vue></div>
         <div class="count-layout"><span class="count">{{party.mps.length}}</span></div>
       </h3>
       <ol>

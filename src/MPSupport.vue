@@ -42,7 +42,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      &>svg { flex: 0 1 auto; }
+      &>.logo-layout { flex: 1 0 50%; }
       &>.count-layout { flex: 0 0 auto; padding-left: 1rem; }
     }
   }
