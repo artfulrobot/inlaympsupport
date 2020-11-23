@@ -1,0 +1,57 @@
+<div class="crm-container">
+  <h1 crm-page-title>{{ ts('Edit %1', {1: inlayType.name })}}</h1>
+
+  <form name="inlayForm" crm-ui-id-scope>
+
+
+    <div crm-ui-field="{name: 'inlayForm.name', title: ts('Name'), help: hs('inlay_name')}">
+      <input
+        crm-ui-id="inlayForm.name"
+        name="name"
+        ng-model="inlay.name"
+        class="crm-form-text"
+        placeholder="{{ts('e.g. 2020-11 Biden/NHS')}}"
+        />
+      <p>This is an internal name.</p>
+    </div>
+
+    <div crm-ui-field="{name: 'inlayForm.publicTitle', title: ts('Public Title')}">
+      <input
+        crm-ui-id="inlayForm.publicTitle"
+        name="publicTitle"
+        ng-model="inlay.config.publicTitle"
+        class="crm-form-text"
+        placeholder="{{ts('e.g. MPs who support our campaign')}}"
+        style="width:100%"
+        />
+    </div>
+
+    <div crm-ui-field="{name: 'inlayForm.introHTML', title: ts('Intro text before the form fields.')}">
+      <textarea
+        crm-ui-id="inlayForm.introHTML"
+        crm-ui-richtext
+        name="introHTML"
+        ng-model="inlay.config.introHTML"
+        class="crm-form-text"
+        style="width:100%"
+        ></textarea>
+    </div>
+
+    <div crm-ui-field="{name: 'inlayForm.issues', title: ts('Count which issue')}">
+      <select
+        crm-ui-select="{allowClear:false, dropdownAutoWidth: true}"
+        ng-model="inlay.config.issueOptionValue"
+        name="issue"
+        style="width: 100%"
+        >
+        <option ng-repeat="i in issues"
+                value="{{i.id}}">{{i.label}}</option>
+      </select>
+    </div>
+
+    <div>
+      <button ng-click="save()">{{ts('Save')}}</button>
+    </div>
+
+  </form>
+</div>
