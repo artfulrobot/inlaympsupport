@@ -7,16 +7,44 @@
       v-html="inlay.initData.introHTML"
       class="imps-intro"></div>
 
+    <form @submit.prevent="" action='#' class="imps-search">
+      <div>
+        <div class="imps-searchbox">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          <input type="text" v-model="search" @input="updateSearch" />
+        </div>
+        <span>{{searchResult}}</span>
+      </div>
+    </form>
+
     <ul class="imps-partylist" >
       <mp-list
         v-for="party in parties"
         :key="party.name"
         :party="party"
+        :search="search"
         ></mp-list>
     </ul>
   </div>
 </template>
 <style lang="scss">
+.imps-searchbox {
+  position: relative;
+  display: inline-block;
+  margin-right: 1rem;
+
+  svg {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    fill: #1f4f91;
+  }
+  input {
+    border: solid 1px #d8d8d8;
+    border-radius: 3px;
+    padding: 0.5rem 1rem 0.5rem 2.5rem;
+  }
+}
 // Invisible flex wrapper
 .imps-partylist {
   padding: 0;
@@ -63,18 +91,37 @@ export default {
   data() {
     const d = {
       myId: this.$root.getNextId(),
+      parties: this.inlay.initData.mps,
+      search: '',
+      searchResult: '',
     };
+    // do logo
+    d.parties.forEach(party => {
+      party.logo = party.name.replace(/ /g,'-').toLowerCase();
+      party.mps.forEach(mp => { mp.show = true; mp.haystack = (mp.c + mp.n).toLowerCase(); });
+    });
     return d;
   },
-  computed: {
-    parties() {
-      this.inlay.initData.mps.forEach(party => {
-        party.logo = party.name.replace(/ /g,'-').toLowerCase();
-      });
-      return this.inlay.initData.mps;
-    }
-  },
   methods: {
+    updateSearch() {
+      const needle = this.search.toLowerCase();
+      var count = 0;
+      this.parties.forEach(party => {
+        party.mps.forEach(mp => {
+          mp.show = needle ? mp.haystack.indexOf(needle) > -1 : true;
+          count += mp.show ? 1 : 0;
+        });
+      });
+      this.searchResult = '';
+      if (needle) {
+        if (count > 0) {
+          this.searchResult = count + ' match' + (count>1 ? 'es' : '');
+        }
+        else {
+          this.searchResult = 'MP not found';
+        }
+      }
+    }
   }
 }
 </script>

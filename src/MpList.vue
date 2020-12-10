@@ -6,7 +6,7 @@
         <div class="count-layout"><span class="count">{{party.mps.length}}</span></div>
       </h3>
       <ol>
-        <li v-for="mp in mps" >
+        <li v-for="mp in mps" v-if="mp.show">
           <span :is="mp.h ? 'strong' : 'span'">{{mp.c}} - {{mp.n}} MP</span>
         </li>
       </ol>
@@ -25,7 +25,7 @@
 </template>
 <script>
 export default {
-  props: ['party'],
+  props: ['party', 'search'],
   data() {
     return {
       showAll: false,
@@ -40,10 +40,15 @@ export default {
       return this.party.mps.length - this.party.mps.filter(mp => mp.h === 1).length;
     },
     mps() {
-      if (this.showAll) {
-        return this.party.mps;
+      if (this.search) {
+        return this.party.mps.filter(mp => mp.show);
       }
-      return this.party.mps.filter(mp => mp.h === 1);
+      else {
+        if (this.showAll) {
+          return this.party.mps;
+        }
+        return this.party.mps.filter(mp => mp.h === 1);
+      }
     }
   }
 };
