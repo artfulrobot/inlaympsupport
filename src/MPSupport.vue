@@ -69,7 +69,7 @@ export default {
   computed: {
     parties() {
       this.inlay.initData.mps.forEach(party => {
-        party.logo = party.name.replace(/ /,'-').toLowerCase();
+        party.logo = party.name.replace(/ /g,'-').toLowerCase();
       });
       return this.inlay.initData.mps;
     }

@@ -1,9 +1,8 @@
 <template>
   <li>
     <div class="party bc-lb1">
-
       <h3>
-        <div class="logo-layout"><svg-vue style="max-height: 3rem;" :icon="party.logo" ></svg-vue></div>
+        <div class="logo-layout"><svg-vue v-if="logoExists" style="max-height: 3rem;" :icon="party.logo" ></svg-vue>{{ logoExists ? '' : party.name }}</div>
         <div class="count-layout"><span class="count">{{party.mps.length}}</span></div>
       </h3>
       <ol>
@@ -30,6 +29,7 @@ export default {
   data() {
     return {
       showAll: false,
+      logoExists: ['conservatives', 'dup', 'green-party', 'labour', 'liberal-democrats', 'plaid-cymru', 'scottish-national-party'].includes(this.party.logo)
     };
   },
   computed: {
