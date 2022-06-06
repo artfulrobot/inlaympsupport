@@ -22,26 +22,11 @@ class MPSupport extends Type {
   public static $editURLTemplate = 'civicrm/a?#/inlays/mpsupport/{id}';
 
   /**
-   * Sets the config ensuring it's valid.
-   *
-   * This implementation simply ensures all the defaults exist, and that no
-   * other keys exist, but you could do other things, especially if you need to
-   * coerce some old config into a new style.
-   *
-   * @param array $config
-   *
-   * @return \Civi\Inlay\Type (this)
-   */
-  public function setConfig(array $config) {
-    $this->config = array_intersect_key($config + static::$defaultConfig, static::$defaultConfig);
-  }
-
-  /**
    * Generates data to be served with the Javascript application code bundle.
    *
    * @return array
    */
-  public function getInitData() {
+  public function getInitData() :array {
     $data = [
       // Name of global Javascript function used to boot this app.
       'init'             => 'inlayMPSupportInit',
@@ -55,6 +40,7 @@ class MPSupport extends Type {
     // Fetch the data, using a custom API set up in Data Processor since this
     // also provides a handy search/report in CiviCRM.
     $support = civicrm_api3('Contact', 'getmpsupport', [
+      'issue' => $this->config['issueOptionValue'],
       'options' => ['limit' => 0],
     ])['values'] ?? [];
 
@@ -92,7 +78,7 @@ class MPSupport extends Type {
    *
    * @throws \Civi\Inlay\ApiException;
    */
-  public function processRequest(ApiRequest $request) {
+  public function processRequest(ApiRequest $request) :array {
 
     return [ 'success' => 1 ];
   }
@@ -114,7 +100,7 @@ class MPSupport extends Type {
    *
    * @return string Content of a Javascript file.
    */
-  public function getExternalScript() {
+  public function getExternalScript() :string {
     return file_get_contents(E::path('dist/inlay-mpsupport.js'));
   }
 
